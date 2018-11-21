@@ -1,22 +1,14 @@
 from bs4 import BeautifulSoup
 from requests import get
 
-url = "https://medium.freecodecamp.org/an-introduction-to-the-basic-principles-of-functional-programming-a2c2a15c84"
+domain_name = "https://medium.freecodecamp.org/"
+post_slug = "an-introduction-to-the-basic-principles-of-functional-programming-a2c2a15c84"
+post_url = domain_name + post_slug
 
-response = get(url, stream=True)
-print(response.text)
+post_response = get(post_url, stream=True)
 
-a = BeautifulSoup(response.content, 'html.parser')
-post = a.findAll("div", {"class": "sectionLayout--insetColumn"})[0]
-
-h1 = post.find("h1")
-figures = post.findAll("figure")  # images, but also gists
-paragraphs = post.findAll("p")
-h3s = post.findAll("h3")
-h4s = post.findAll("h4")
-blockquotes = post.findAll("blockquote")
-
-# h1, h3, h4, p, figure (images, but also gists), blockquote, unordered list (ul), ordered list (ol)
+soup = BeautifulSoup(post_response.content, 'html.parser')
+post = soup.findAll("div", {"class": "sectionLayout--insetColumn"})[0]
 
 
 def markdown_h1(tag):
@@ -52,10 +44,7 @@ def markdown_image(tag):
         code = gist_file['content']
         programming_language = gist_file['language'].lower()
 
-        codeblock = f"""```{programming_language}
-        {code}
-        ```
-        """
+        codeblock = f"```{programming_language}\n{code}\n```"
         return codeblock
 
 
