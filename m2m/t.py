@@ -36,7 +36,10 @@ def markdown_paragraph(tag):
 
 
 def markdown_image(tag):
-    return f"![]({tag.img['src']})"
+    if tag.img:
+        return f"![]({tag.img['src']})"
+    elif tag.iframe:
+        return f"![]({tag.iframe['src']})"
 
 
 def markdown_blockquote(tag):
@@ -44,11 +47,15 @@ def markdown_blockquote(tag):
 
 
 def markdown_unordered_list(tag):
-    pass
+    unordered_lists = tag.findAll("li")
+    lists_texts = [f"* {li.text}" for li in unordered_lists]
+    return "\n\n".join(lists_texts)
 
 
 def markdown_ordered_list(tag):
-    pass
+    ordered_lists = tag.findAll("ol")
+    lists_texts = [f"1. {li.text}" for li in ordered_lists]
+    return "\n\n".join(lists_texts)
 
 
 def tag_mapper(tag):
@@ -75,5 +82,6 @@ markdown_file = open("post.md", "w+")
 for tag in post:
     markdown_tag = tag_mapper(tag)
     markdown_file.write(markdown_tag)
+    markdown_file.write("\n\n")
 
 markdown_file.close()
