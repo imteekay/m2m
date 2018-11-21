@@ -39,7 +39,24 @@ def markdown_image(tag):
     if tag.img:
         return f"![]({tag.img['src']})"
     elif tag.iframe:
-        return f"![]({tag.iframe['src']})"
+        domain_name = "https://medium.freecodecamp.org"
+        iframe_url = domain_name + tag.iframe['src']
+        iframe_response = get(iframe_url, stream=True)
+        iframe_soup = BeautifulSoup(iframe_response.content, 'html.parser')
+
+        gist_id = iframe_soup.script['src'].rsplit(".", 1)[0].split("/")[-1]
+        url = f"https://api.github.com/gists/{gist_id}"
+        gist_response = get(url, stream=True)
+
+        gist_file = next(iter(gist_response.json()['files'].values()))
+        code = gist_file['content']
+        programming_language = gist_file['language'].lower()
+
+        codeblock = f"""```{programming_language}
+        {code}
+        ```
+        """
+        return codeblock
 
 
 def markdown_blockquote(tag):
