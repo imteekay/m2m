@@ -1,5 +1,13 @@
+import os
+
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 from requests import get
+
+load_dotenv()
+
+GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME')
+GITHUB_PASSWORD = os.environ.get('GITHUB_PASSWORD')
 
 domain_name = "https://medium.freecodecamp.org/"
 post_slug = "an-introduction-to-the-basic-principles-of-functional-programming-a2c2a15c84"
@@ -38,7 +46,7 @@ def markdown_image(tag):
 
         gist_id = iframe_soup.script['src'].rsplit(".", 1)[0].split("/")[-1]
         url = f"https://api.github.com/gists/{gist_id}"
-        gist_response = get(url, stream=True)
+        gist_response = get(url, auth=(GITHUB_USERNAME, GITHUB_PASSWORD))
 
         gist_file = next(iter(gist_response.json()['files'].values()))
         code = gist_file['content']
