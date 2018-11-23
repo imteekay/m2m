@@ -14,7 +14,7 @@ class GistToCodeblock:
     def __init__(self, tag):
         self.tag = tag
 
-    def tranform(self):
+    def transform(self):
         return self.build_codeblock()
 
     def build_codeblock(self):
