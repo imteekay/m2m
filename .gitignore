@@ -1,3 +1,4 @@
 m2menv
 .vscode
 .env
+__pycache__
