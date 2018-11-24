@@ -14,6 +14,11 @@ cp .sample-env .env
 
 ## Requirements
 
+Run this command to install all required libraries
+```bash
+pip install -r dev-requirements.txt
+```
+
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/): Easily parse HTML
 - [Python DotEnv](https://github.com/theskumar/python-dotenv): Store environment variables
 - [Requests](https://github.com/requests/requests): Access public APIs & HTML pages
