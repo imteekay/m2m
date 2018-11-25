@@ -21,7 +21,7 @@ class MediumToMarkdown:
     def medium_post(self):
         post_content = self.medium_post_response().content
         soup = BeautifulSoup(post_content, 'html.parser')
-        return soup.findAll("div", {"class": "sectionLayout--insetColumn"})
+        return soup.find_all("div", {"class": "sectionLayout--insetColumn"})
 
     def medium_post_response(self):
         return get(self.post_url, stream=True)
