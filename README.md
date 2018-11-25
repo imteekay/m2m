@@ -14,11 +14,34 @@ cp .sample-env .env
 
 ## Requirements
 
+Create your virtual environment
+
+```bash
+virtualenv m2menv
+```
+
+Activate your virtualenv
+
+```base
+source m2menv/bin/activate
+```
+
 Run this command to install all required libraries
 ```bash
 pip install -r dev-requirements.txt
 ```
 
+- [Python 3](https://docs.python.org/3/)
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/): Easily parse HTML
 - [Python DotEnv](https://github.com/theskumar/python-dotenv): Store environment variables
 - [Requests](https://github.com/requests/requests): Access public APIs & HTML pages
+
+## Usage
+
+To do the Medium to Markdown transformation, call the `core.py` passing the post url
+
+```bash
+python m2m/core.py http://bit.ly/2FG5GgT
+```
+
+If you not pass the post url, the `core.py` will use the default post url
