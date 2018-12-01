@@ -11,12 +11,15 @@ class MediumToMarkdown:
         markdown_file = open("post.md", "w+")
 
         for section in self.medium_post():
-            for tag in section:
+            for tag in self.exclude_div_tags_from(section):
                 markdown_tag = TagMapper(tag).to_markdown()
                 markdown_file.write(markdown_tag)
                 markdown_file.write("\n\n")
 
         markdown_file.close()
+
+    def exclude_div_tags_from(self, section):
+        return [tag for tag in section if tag.name != 'div']
 
     def medium_post(self):
         post_content = self.medium_post_response().content
