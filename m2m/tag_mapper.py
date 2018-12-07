@@ -42,9 +42,9 @@ class TagMapper:
                                  .replace("https://medium.com/r/?url=", ""))
             return f"{result_text}[{current_text.text}]({anchor_url})"
         elif current_text.name == "strong":
-            return f"{result_text}**{current_text.text}**"
+            return f"{result_text}**{current_text.text.strip()}**"
         elif current_text.name == "em":
-            return ""
+            return result_text + current_text.text
         else:
             return result_text + current_text
 
