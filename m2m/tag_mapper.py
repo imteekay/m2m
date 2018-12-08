@@ -67,6 +67,10 @@ class TagMapper:
         return "\n\n".join(lists_texts)
 
     def markdown_ordered_list(self):
-        ordered_lists = self.tag.find_all("ol")
-        lists_texts = [f"1. {li.text}" for li in ordered_lists]
-        return "\n\n".join(lists_texts)
+        ordered_lists = self.tag.find_all("li")
+        texts = [
+            reduce(lambda result_text, current_text: self.parse_text(result_text, current_text), li, '') for li in ordered_lists]
+
+        list_texts = [f"{index+1}. {list_item}" for index,
+                      list_item in enumerate(texts)]
+        return "\n\n".join(list_texts)
