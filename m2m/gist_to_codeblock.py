@@ -20,8 +20,11 @@ class GistToCodeblock:
     def build_codeblock(self):
         gist_file = self.gist_file()
         code = gist_file['content']
-        programming_language = gist_file['language'].lower()
-        return f"```{programming_language}\n{code}\n```"
+
+        if gist_file['language']:
+            return f"```{gist_file['language'].lower()}\n{code}\n```"
+        else:
+            return f"```\n{code}\n```"
 
     def gist_file(self):
         gist_response = get(self.gist_api_url(),
