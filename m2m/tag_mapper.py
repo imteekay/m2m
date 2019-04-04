@@ -4,11 +4,22 @@ from gist_to_codeblock import GistToCodeblock
 from urllib.parse import unquote
 
 
+class Counter(object):
+    def __init__(self, fun):
+        self._fun = fun
+        self.counter = ''
+
+    def __call__(self, *args, **kwargs):
+        self.counter += 1
+        return self._fun(*args, **kwargs)
+
+
 class TagMapper:
     def __init__(self, tag):
         self.tag = tag
 
     def to_markdown(self):
+        print(self.tag.name)
         if self.tag.name == 'h1':
             return self.markdown_h1()
         elif self.tag.name == 'h3':
@@ -25,6 +36,27 @@ class TagMapper:
             return self.markdown_unordered_list()
         elif self.tag.name == 'ol':
             return self.markdown_ordered_list()
+        # add div
+        elif self.tag.name == 'div':
+            return self.markdown_div()
+
+    def deal_div(self, div_tag):
+        for child in div_tag:
+            if child.name == 'div':
+                temp = self.deal_div(child)
+                if temp:
+                    self.s += temp
+            temp = reduce(lambda result_text, current_text: self.parse_text(
+                result_text, current_text), child, "")
+
+            if child.name == 'a' and child.has_attr('href'):
+                temp = f"[{temp}]({child['href']})"
+            self.s += temp
+
+    def markdown_div(self):
+        self.s = ''
+        self.deal_div(self.tag)
+        return self.s
 
     def markdown_h1(self):
         return f"# {self.tag.text}"
@@ -36,9 +68,11 @@ class TagMapper:
         return f"#### {self.tag.text}"
 
     def parse_text(self, result_text, current_text):
+        print(current_text.name, )
         if current_text.name == "code":
             return f"{result_text}`{current_text.text}`"
         elif current_text.name == "a":
+            print(current_text['href'])
             anchor_url = unquote(current_text['href']
                                  .replace("https://medium.com/r/?url=", ""))
             return f"{result_text}[{current_text.text}]({anchor_url})"
@@ -46,6 +80,12 @@ class TagMapper:
             return f"{result_text}**{current_text.text.strip()}**"
         elif current_text.name == "em":
             return result_text + current_text.text
+        # add br
+        elif current_text.name == 'br':
+            return result_text + '\n' + current_text.text
+        # add img
+        elif current_text.name == 'img':
+            return f"![]({self.tag.img['src']})"
         else:
             return result_text + current_text
 

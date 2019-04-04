@@ -12,9 +12,13 @@ class MediumToMarkdown:
         markdown_file = open("post.md", "w+", encoding="utf8")
 
         for section in self.medium_post():
-            for tag in self.exclude_div_tags_from(section):
+            # for tag in self.exclude_div_tags_from(section):
+            for tag in section:
+                if tag.name == 'div' and 'uiScale-caption--regular' in tag["class"]:
+                    continue
                 markdown_tag = TagMapper(tag).to_markdown()
-                markdown_file.write(markdown_tag)
+                if markdown_tag:
+                    markdown_file.write(markdown_tag)
                 markdown_file.write("\n\n")
 
         markdown_file.close()
