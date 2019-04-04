@@ -68,11 +68,11 @@ class TagMapper:
         return f"#### {self.tag.text}"
 
     def parse_text(self, result_text, current_text):
-        print(current_text.name, )
+        # print(current_text.name, )
         if current_text.name == "code":
             return f"{result_text}`{current_text.text}`"
         elif current_text.name == "a":
-            print(current_text['href'])
+            # print(current_text['href'])
             anchor_url = unquote(current_text['href']
                                  .replace("https://medium.com/r/?url=", ""))
             return f"{result_text}[{current_text.text}]({anchor_url})"
