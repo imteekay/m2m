@@ -1,3 +1,4 @@
+# coding: utf8
 from bs4 import BeautifulSoup
 from requests import get
 from tag_mapper import TagMapper
@@ -8,7 +9,7 @@ class MediumToMarkdown:
         self.post_url = post_url
 
     def transform(self):
-        markdown_file = open("post.md", "w+")
+        markdown_file = open("post.md", "w+", encoding="utf8")
 
         for section in self.medium_post():
             for tag in self.exclude_div_tags_from(section):

@@ -1,3 +1,4 @@
+# coding: utf8
 from functools import reduce
 from gist_to_codeblock import GistToCodeblock
 from urllib.parse import unquote
