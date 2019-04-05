@@ -4,22 +4,12 @@ from gist_to_codeblock import GistToCodeblock
 from urllib.parse import unquote
 
 
-class Counter(object):
-    def __init__(self, fun):
-        self._fun = fun
-        self.counter = ''
-
-    def __call__(self, *args, **kwargs):
-        self.counter += 1
-        return self._fun(*args, **kwargs)
-
-
 class TagMapper:
     def __init__(self, tag):
         self.tag = tag
 
     def to_markdown(self):
-        print(self.tag.name)
+        # print(self.tag.name)
         if self.tag.name == 'h1':
             return self.markdown_h1()
         elif self.tag.name == 'h3':
