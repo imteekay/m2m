@@ -31,12 +31,12 @@ class TagMapper:
     def parse_div(self, div_tag):
         for child in div_tag:
             if child.name == 'div':
-                self.s += self.parse_div(child) if self.parse_div(child) else ''
+                div_string = self.parse_div(child)
+                self.s += div_string if div_string else ''
             elif child.name == 'a' and child.has_attr('href'):
                 link_text = reduce(lambda result_text, current_text: self.parse_text(
                     result_text, current_text), child, "")
                 self.s += f"[{link_text}]({child['href']})"
-            self.s += temp
 
     def markdown_div(self):
         self.s = ''
