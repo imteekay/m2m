@@ -1,3 +1,4 @@
+# coding: utf8
 from functools import reduce
 from gist_to_codeblock import GistToCodeblock
 from urllib.parse import unquote
@@ -24,6 +25,23 @@ class TagMapper:
             return self.markdown_unordered_list()
         elif self.tag.name == 'ol':
             return self.markdown_ordered_list()
+        elif self.tag.name == 'div':
+            return self.parse_div(self.tag)
+
+    def parse_div(self, div_tag):
+        for child in div_tag:
+            if child.name == 'div':
+                div_string = self.parse_div(child)
+                self.s += div_string if div_string else ''
+            elif child.name == 'a' and child.has_attr('href'):
+                link_text = reduce(lambda result_text, current_text: self.parse_text(
+                    result_text, current_text), child, "")
+                self.s += f"[{link_text}]({child['href']})"
+
+    def markdown_div(self):
+        self.s = ''
+        self.parse_div(self.tag)
+        return self.s
 
     def markdown_h1(self):
         return f"# {self.tag.text}"
@@ -45,6 +63,10 @@ class TagMapper:
             return f"{result_text}**{current_text.text.strip()}**"
         elif current_text.name == "em":
             return result_text + current_text.text
+        elif current_text.name == 'br':
+            return result_text + '\n' + current_text.text
+        elif current_text.name == 'img':
+            return f"![]({self.tag.img['src']})"
         else:
             return result_text + current_text
 
