@@ -41,7 +41,16 @@ pip install -r dev-requirements.txt
 To do the Medium to Markdown transformation, call the `core.py` passing the post url
 
 ```bash
+# Method One: single url
 python m2m/core.py http://bit.ly/2FG5GgT
+
+# Method Two: a lot of urls, a file like input_file.txt
+python m2m/core.py input_file.txt
 ```
 
-If you not pass the post url, the `core.py` will use the default post url
+If you not pass the post url, the `core.py` will use the default post url.
+
+**Note**
+
+- The `output` md file is the title of the article.
+- The `input_file.txt` is one url per line.
