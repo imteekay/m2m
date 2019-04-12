@@ -26,7 +26,7 @@ class TagMapper:
         elif self.tag.name == 'ol':
             return self.markdown_ordered_list()
         elif self.tag.name == 'div':
-            return self.parse_div(self.tag)
+            return self.markdown_div()
 
     def parse_div(self, div_tag):
         for child in div_tag:
