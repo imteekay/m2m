@@ -27,8 +27,9 @@ source m2menv/bin/activate
 ```
 
 Run this command to install all required libraries
+
 ```bash
-pip install -r dev-requirements.txt
+pip install -r requirements.txt
 ```
 
 - [Python 3](https://docs.python.org/3/)
