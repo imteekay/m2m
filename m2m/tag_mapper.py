@@ -26,7 +26,7 @@ class TagMapper:
         elif self.tag.name == 'ol':
             return self.markdown_ordered_list()
         elif self.tag.name == 'div':
-            return self.parse_div(self.tag)
+            return self.markdown_div()
 
     def parse_div(self, div_tag):
         for child in div_tag:
@@ -37,6 +37,8 @@ class TagMapper:
                 link_text = reduce(lambda result_text, current_text: self.parse_text(
                     result_text, current_text), child, "")
                 self.s += f"[{link_text}]({child['href']})"
+            elif child.name == 'img' and child.has_attr('data-li-src'):
+                self.s += f"![]({child['data-li-src']})"
 
     def markdown_div(self):
         self.s = ''
@@ -66,6 +68,8 @@ class TagMapper:
         elif current_text.name == 'br':
             return result_text + '\n' + current_text.text
         elif current_text.name == 'img':
+            if self.tag.img.attrs.has_attr('data-delayed-url'):
+                return f"![]({self.tag.img['data-delayed-url']})"
             return f"![]({self.tag.img['src']})"
         else:
             return result_text + current_text

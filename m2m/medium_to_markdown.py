@@ -9,8 +9,8 @@ class MediumToMarkdown:
         self.post_url = post_url
 
     def transform(self):
-        responses = self.medium_post()
-        fname = '-'.join(responses.url.split('/')[-1].split('-')[:-1])
+        responses, url = self.medium_post()
+        fname = '-'.join(url.split('/')[-1].split('-')[:-1])
 
         markdown_file = open(f"{fname}.md", "w+", encoding="utf8")
         for section in responses:
@@ -26,9 +26,10 @@ class MediumToMarkdown:
         markdown_file.close()
 
     def medium_post(self):
-        post_content = self.medium_post_response().content
+        responses = self.medium_post_response()
+        post_content = responses.content
         soup = BeautifulSoup(post_content, 'html.parser')
-        return soup.find_all("div", {"class": "sectionLayout--insetColumn"})
+        return soup.find_all("div", {"class": "sectionLayout--insetColumn"}), responses.url
 
     def medium_post_response(self):
         return get(self.post_url, stream=True)
